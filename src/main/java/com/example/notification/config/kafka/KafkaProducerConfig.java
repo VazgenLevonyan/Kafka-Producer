@@ -20,13 +20,17 @@ public class KafkaProducerConfig {
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
 
+    @Value("${kafka.activity.topic.name}")
+    private String topicName;
+
+
     @Bean
     public ProducerFactory<String, NotificationDTO> notifyProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        configProps.put(JsonSerializer.TYPE_MAPPINGS, "notify:com.example.notification.dto.NotificationDTO");
+        configProps.put(JsonSerializer.TYPE_MAPPINGS, topicName+":com.example.notification.dto.NotificationDTO");
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 
